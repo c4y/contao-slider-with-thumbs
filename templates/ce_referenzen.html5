@@ -28,33 +28,6 @@
 
     <?php echo $this->pagination; ?>
 
-<script>
-    (function($) {
-        $(document).ready(function() {
-            $("#referenzenslider<?php echo $this->id; ?> .pagination a").click(function(event)
-            {
-                console.log("test");
-                event.preventDefault();
-                var page = $(event.target).attr('href').match('page_r<?php echo $this->id; ?>=[0-9]+')[0];
-                page = page.split("=")[1];
-                $.ajax({
-                    type: "GET",
-                    url:  "SimpleAjaxFrontend.php",
-                    data: {
-                        type: "a",
-                        id: <?php echo $this->id; ?>,
-                        page_r<?php echo $this->id; ?>: page
-                    },
-                    success: function(result)
-                    {
-                        $("#thumbs-wrapper<?php echo $this->id; ?>").html(result);
-                    }
-                 });
-             });
-        });
-    })(jQuery);
-</script>
-
 </div>
 
 </div>
@@ -62,6 +35,31 @@
 
 <script>
   (function($) {
+
+    function setEventHandler()
+    {
+        $("#referenzenslider<?php echo $this->id; ?> .pagination a").click(function(event)
+        {
+            event.preventDefault();
+            var page = $(event.target).attr('href').match('page_r<?php echo $this->id; ?>=[0-9]+')[0];
+            page = page.split("=")[1];
+            $.ajax({
+                type: "GET",
+                url:  "SimpleAjaxFrontend.php",
+                data: {
+                    type: "a",
+                    id: <?php echo $this->id; ?>,
+                    page_r<?php echo $this->id; ?>: page
+                },
+                success: function(result)
+                {
+                    $("#thumbs-wrapper<?php echo $this->id; ?>").html(result);
+                    setEventHandler();
+                }
+            });
+         });
+    }
+
     $(document).ready(function() {
 
         var swipe,s;
@@ -80,7 +78,10 @@
             swipe.slide($(this).data("idx"), 300);
         });
 
+        setEventHandler();
+
     });
+
 
   })(jQuery);
 </script>
