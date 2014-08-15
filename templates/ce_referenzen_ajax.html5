@@ -1,0 +1,9 @@
+<div class="referenzen-thumbs">
+    <ul>
+        <?php foreach($this->thumbs as $thumb): ?>
+            <li><a data-idx="<?php echo $thumb['idx']; ?>" href="#"><img src="<?php echo $thumb['thumbimage']; ?>" alt="" /></a></li>
+        <?php endforeach; ?>
+    </ul>
+</div>
+
+<?php echo $this->pagination; ?>

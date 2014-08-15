@@ -1,0 +1,86 @@
+<div id="referenzenslider<?php echo $this->id; ?>">
+
+<div class="content-slider">
+    <div class="slider-wrapper">
+        <?php foreach($this->slider as $slide): ?>
+            <div class="referenz">
+                <img src="<?php echo $slide['sliderimage']; ?>" alt="" />
+                <div class="text"><?php echo $slide["text"]; ?></div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+
+    <nav class="slider-control">
+        <a href="#" class="slider-prev">Previous</a>
+        <span class="slider-menu"></span>
+        <a href="#" class="slider-next">Next</a>
+    </nav>
+</div>
+
+<div id="thumbs-wrapper<?php echo $this->id; ?>">
+    <div class="referenzen-thumbs">
+        <ul>
+            <?php foreach($this->thumbs as $thumb): ?>
+                <li><a data-idx="<?php echo $thumb['idx']; ?>" href="#"><img src="<?php echo $thumb['thumbimage']; ?>" alt="" /></a></li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+
+    <?php echo $this->pagination; ?>
+
+<script>
+    (function($) {
+        $(document).ready(function() {
+            $("#referenzenslider<?php echo $this->id; ?> .pagination a").click(function(event)
+            {
+                console.log("test");
+                event.preventDefault();
+                var page = $(event.target).attr('href').match('page_r<?php echo $this->id; ?>=[0-9]+')[0];
+                page = page.split("=")[1];
+                $.ajax({
+                    type: "GET",
+                    url:  "SimpleAjaxFrontend.php",
+                    data: {
+                        type: "a",
+                        id: <?php echo $this->id; ?>,
+                        page_r<?php echo $this->id; ?>: page
+                    },
+                    success: function(result)
+                    {
+                        $("#thumbs-wrapper<?php echo $this->id; ?>").html(result);
+                    }
+                 });
+             });
+        });
+    })(jQuery);
+</script>
+
+</div>
+
+</div>
+
+
+<script>
+  (function($) {
+    $(document).ready(function() {
+
+        var swipe,s;
+
+        s = $("#referenzenslider<?php echo $this->id; ?> .content-slider")[0];
+        swipe = new Swipe(s, {
+          'auto': 5000,
+          'speed': 300,
+          'startSlide': 0,
+          'continuous': 1,
+          'menu': $("#referenzenslider<?php echo $this->id; ?> .slider-control")[0]
+        });
+
+        $("#referenzenslider<?php echo $this->id; ?> .referenzen-thumbs a").click(function(event){
+            event.preventDefault();
+            swipe.slide($(this).data("idx"), 300);
+        });
+
+    });
+
+  })(jQuery);
+</script>
