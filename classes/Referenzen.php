@@ -39,6 +39,8 @@ class Referenzen extends \Controller
      */
     public function __construct($id = null, $perPage = null, $referenzengallerysize = null, $referenzenthumbsize = null)
     {
+        $this->loadLanguageFile("default");
+
         $this->perPage = $perPage;
         $this->id = (isset($id)) ? $id : $_GET["id"];
         $this->objGallery = \Database::getInstance()->query("SELECT * FROM tl_referenzen ORDER BY sorting ASC");

@@ -41,8 +41,15 @@
         $("#referenzenslider<?php echo $this->id; ?> .pagination a").click(function(event)
         {
             event.preventDefault();
-            var page = $(event.target).attr('href').match('page_r<?php echo $this->id; ?>=[0-9]+')[0];
-            page = page.split("=")[1];
+            var page;
+            var href = $(event.target).attr('href');
+
+            page = href.match('page_r<?php echo $this->id; ?>=[0-9]+');
+            if (page != null)
+            {
+                page = page[0].split("=")[1];
+            }
+
             $.ajax({
                 type: "GET",
                 url:  "SimpleAjaxFrontend.php",
@@ -55,14 +62,25 @@
                 {
                     $("#thumbs-wrapper<?php echo $this->id; ?>").html(result);
                     setEventHandler();
+                    setThumbEvents();
                 }
             });
          });
     }
 
+    function setThumbEvents()
+    {
+        $("#referenzenslider<?php echo $this->id; ?> .referenzen-thumbs a").click(function(event){
+            event.preventDefault();
+            swipe.slide($(this).data("idx"), 300);
+        });
+    }
+
+    var swipe;
+
     $(document).ready(function() {
 
-        var swipe,s;
+        var s;
 
         s = $("#referenzenslider<?php echo $this->id; ?> .content-slider")[0];
         swipe = new Swipe(s, {
@@ -73,12 +91,8 @@
           'menu': $("#referenzenslider<?php echo $this->id; ?> .slider-control")[0]
         });
 
-        $("#referenzenslider<?php echo $this->id; ?> .referenzen-thumbs a").click(function(event){
-            event.preventDefault();
-            swipe.slide($(this).data("idx"), 300);
-        });
-
         setEventHandler();
+        setThumbEvents();
 
     });
 
